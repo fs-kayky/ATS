@@ -9,11 +9,13 @@ from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
 
+
 @router.post("/jobs")
 async def create_job(title: str):
     job = Job(title)
     result = await jobs_collection.insert_one(job.__dict__)
     return {"job_id": str(result.inserted_id)}
+
 
 @router.post("/jobs/{job_id}/requirements")
 async def upload_requirements(job_id: str, file: UploadFile = File(...)):
@@ -24,6 +26,7 @@ async def upload_requirements(job_id: str, file: UploadFile = File(...)):
 
     await jobs_collection.update_one({"_id": ObjectId(job_id)}, {"$set": {"requirements": {"text": text}}})
     return {"message": "Requisitos atualizados com sucesso"}
+
 
 @router.post("/jobs/{job_id}/candidates")
 async def add_candidates(job_id: str, files: List[UploadFile] = File(...)):
@@ -37,8 +40,8 @@ async def add_candidates(job_id: str, files: List[UploadFile] = File(...)):
 
     candidates = []
     for file in files:
-        text = pdf_text.extract_text(file) 
-        
+        text = pdf_text.extract_text(file)
+
         prompt = f"Requisitos da vaga:\n{job_requirements}\n\nCurrículo do candidato:\n{text}"
         candidate_data = genai.consult_genai(prompt)
 
@@ -59,6 +62,7 @@ async def add_candidates(job_id: str, files: List[UploadFile] = File(...)):
     )
 
     return {"message": "Candidatos adicionados", "data": candidates}
+
 
 @router.get("/jobs/{job_id}/candidates")
 async def get_candidates(job_id: str):
