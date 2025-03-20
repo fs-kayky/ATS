@@ -1,6 +1,0 @@
-tk  
-pdfplumber  
-google-generativeai  
-python-dotenv
-fastapi
-uvicorn

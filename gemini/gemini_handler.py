@@ -9,6 +9,7 @@ GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 
 genai.configure(api_key=GEMINI_KEY)
 
+
 def consult_genai(prompt):
     model = genai.GenerativeModel("gemini-1.5-flash")
     
@@ -30,7 +31,7 @@ def consult_genai(prompt):
     response = model.generate_content(full_prompt)
     
     try:
-        match = re.search(r"\{.*\}", response.text, re.DOTALL)
+        match = re.search(r"\{.*}", response.text, re.DOTALL)
         if match:
             json_str = match.group(0)
             return json.loads(json_str)
