@@ -1,9 +1,13 @@
 import pdfplumber
 
 def extract_text(pdf_path):
-    with pdfplumber.open(pdf_path) as pdf:
-        complete_text = ''
+    pdf_path.file.seek(0)
+    complete_text = ''
+
+    with pdfplumber.open(pdf_path.file) as pdf:
         for page in pdf.pages:
-            complete_text += page.extract_text()
+            page_text = page.extract_text()
+            if page_text:
+                complete_text += page_text + "\n"
 
     return complete_text

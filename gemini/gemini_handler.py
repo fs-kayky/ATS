@@ -1,6 +1,8 @@
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+import json
+import re
 
 load_dotenv()
 GEMINI_KEY = os.getenv("GEMINI_API_KEY") 
@@ -23,11 +25,17 @@ def consult_genai(prompt):
     
     Responda apenas com um JSON sem explicações adicionais.
     """
+    print(full_prompt)
     
     response = model.generate_content(full_prompt)
     
     try:
-        return response.text
+        match = re.search(r"\{.*\}", response.text, re.DOTALL)
+        if match:
+            json_str = match.group(0)
+            return json.loads(json_str)
+        else:
+            raise ValueError("Resposta do Gemini não contém um JSON válido")
     except Exception as e:
-        print("GENAI PROCESS ASNWER ERROR: ", str(e))
+        print("GENAI PROCESS ANSWER ERROR:", str(e))
         return None

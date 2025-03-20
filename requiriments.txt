@@ -1,4 +1,6 @@
 tk  
 pdfplumber  
 google-generativeai  
-python-dotenv 
+python-dotenv
+fastapi
+uvicorn
