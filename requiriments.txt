@@ -1,0 +1,4 @@
+tk  
+pdfplumber  
+google-generativeai  
+python-dotenv 
