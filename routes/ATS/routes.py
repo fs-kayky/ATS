@@ -9,6 +9,13 @@ from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
 
+@router.get("/jobs")
+async def get_all_jobs():
+    jobs_cursor = jobs_collection.find({})
+    jobs = await jobs_cursor.to_list(length=None)
+    for job in jobs:
+        job["_id"] = str(job["_id"])
+    return jobs
 
 @router.post("/jobs")
 async def create_job(title: str):
@@ -78,3 +85,18 @@ async def get_candidates(job_id: str):
     job_serialized = jsonable_encoder(job, custom_encoder={ObjectId: str})
 
     return job_serialized.get("candidates", [])
+
+@router.get("/job-info/{job_id}")
+async def get_jobInfo_by_id(job_id: str):
+    try:
+        obj_id = ObjectId(job_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="job_id inválido!")
+    
+    job = await jobs_collection.find_one({"_id": obj_id})
+    if not job:
+        raise HTTPException(status_code=404, detail="Vaga não encontrada")
+    
+    job_serialized = jsonable_encoder(job, custom_encoder={ObjectId: str})
+    
+    return job_serialized

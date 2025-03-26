@@ -17,7 +17,7 @@ def consult_genai(prompt):
     Você é um assistente ATS. Analise o currículo e os requisitos da vaga e retorne um JSON com:
     - "nome_candidato": Nome Disponivel no curriculo
     - "match_vaga": valor percentual de compatibilidade com a vaga
-    - "nota_geral": um número de 0 a 10 indicando a adequação do candidato.
+    - "nota_geral": um número de 0 a 5 indicando a adequação do candidato.
     - "perguntas_modelo": Uma lista de até 5 perguntas que testariam grande parte das habilidades do candidato, para vaga especifica.
     - "pontos_fortes": uma lista de habilidades relevantes do candidato.
     - "pontos_fracos": uma lista de habilidades que faltam.
